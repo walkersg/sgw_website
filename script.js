@@ -15,6 +15,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Load research statistics
     loadResearchStatistics();
+    
+    // Initialize citation popup (only on research page)
+    if (document.querySelector('.cite-btn')) {
+        initializeCitationPopup();
+    }
 });
 
 function initializePage() {
@@ -254,11 +259,124 @@ function animateNumbers() {
     });
 }
 
+// Citation popup functionality
+function initializeCitationPopup() {
+    // Add event listeners to all cite buttons
+    document.querySelectorAll('.cite-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            openCitationModal(this);
+        });
+    });
+    
+    // Add event listener to format radio buttons
+    document.querySelectorAll('input[name="citationFormat"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            updateCitationText();
+        });
+    });
+    
+    // Add event listener to copy button
+    const copyBtn = document.getElementById('copyCitationBtn');
+    if (copyBtn) {
+        copyBtn.addEventListener('click', copyCitationToClipboard);
+    }
+}
+
+function openCitationModal(button) {
+    // Get publication data from button attributes
+    const title = button.getAttribute('data-title');
+    const authors = button.getAttribute('data-authors');
+    const journal = button.getAttribute('data-journal');
+    const year = button.getAttribute('data-year');
+    const doi = button.getAttribute('data-doi');
+    
+    // Store data globally for use in other functions
+    window.currentCitation = {
+        title: title,
+        authors: authors,
+        journal: journal,
+        year: year,
+        doi: doi
+    };
+    
+    // Update citation text with default format (APA)
+    updateCitationText();
+    
+    // Show the modal
+    const modal = new bootstrap.Modal(document.getElementById('citationModal'));
+    modal.show();
+}
+
+function updateCitationText() {
+    if (!window.currentCitation) return;
+    
+    const format = document.querySelector('input[name="citationFormat"]:checked').value;
+    const citationText = generateCitation(window.currentCitation, format);
+    
+    document.getElementById('citationText').value = citationText;
+}
+
+function generateCitation(data, format) {
+    const { title, authors, journal, year, doi } = data;
+    
+    switch (format) {
+        case 'apa':
+            return `${authors} (${year}). ${title}. ${journal}. https://doi.org/${doi}`;
+        
+        case 'mla':
+            return `${authors}. "${title}." ${journal}, ${year}, https://doi.org/${doi}.`;
+        
+        case 'chicago':
+            return `${authors}. "${title}." ${journal} (${year}). https://doi.org/${doi}.`;
+        
+        default:
+            return `${authors} (${year}). ${title}. ${journal}. https://doi.org/${doi}`;
+    }
+}
+
+function copyCitationToClipboard() {
+    const citationText = document.getElementById('citationText');
+    const copySuccess = document.getElementById('copySuccess');
+    
+    // Select and copy the text
+    citationText.select();
+    citationText.setSelectionRange(0, 99999); // For mobile devices
+    
+    try {
+        document.execCommand('copy');
+        
+        // Show success message
+        copySuccess.style.display = 'inline';
+        setTimeout(() => {
+            copySuccess.style.display = 'none';
+        }, 2000);
+        
+        // Change button text temporarily
+        const copyBtn = document.getElementById('copyCitationBtn');
+        const originalText = copyBtn.innerHTML;
+        copyBtn.innerHTML = '<i class="bi bi-check me-1"></i>Copied!';
+        copyBtn.classList.remove('btn-primary');
+        copyBtn.classList.add('btn-success');
+        
+        setTimeout(() => {
+            copyBtn.innerHTML = originalText;
+            copyBtn.classList.remove('btn-success');
+            copyBtn.classList.add('btn-primary');
+        }, 1500);
+        
+    } catch (err) {
+        console.error('Failed to copy citation: ', err);
+        alert('Failed to copy citation. Please select and copy manually.');
+    }
+}
+
 // Export functions for use in other scripts
 window.SGWWebsite = {
     formatDate,
     truncateText,
     addLoadingState,
     trackClick,
-    loadResearchStatistics
+    loadResearchStatistics,
+    initializeCitationPopup
 };

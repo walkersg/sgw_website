@@ -355,6 +355,38 @@ html {
     color: #6c757d;
 }
 
+/* Citation Popup Styles */
+.citation-text {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    resize: none;
+}
+
+.citation-text:focus {
+    background-color: #ffffff;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.citation-formats .btn-check:checked + .btn {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.cite-btn {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cite-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 /* Page Transitions */
 .page-transition {
     opacity: 0;
