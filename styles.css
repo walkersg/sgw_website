@@ -14,11 +14,32 @@
 }
 
 /* Global Styles */
-body {
+html, body {
+    height: 100%;
     font-family: var(--font-family);
     line-height: 1.6;
     color: var(--dark-color);
     background-color: #ffffff;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Main content wrapper */
+main {
+    flex: 1;
+}
+
+/* Ensure footer stays at bottom */
+footer {
+    background-color: var(--dark-color) !important;
+    color: white !important;
+    position: relative;
+    z-index: 10;
+    margin-top: auto;
 }
 
 /* Typography */
@@ -188,9 +209,8 @@ body {
     box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
 }
 
-/* Footer */
-footer {
-    background-color: var(--dark-color) !important;
+footer p {
+    color: white !important;
 }
 
 /* Project Cards */
@@ -397,4 +417,10 @@ html {
 .page-transition.loaded {
     opacity: 1;
     transform: translateY(0);
+}
+
+object.email {
+	height: 2em;
+	margin: -1em 0;
+	vertical-align: middle;
 }
