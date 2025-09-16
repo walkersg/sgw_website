@@ -418,9 +418,3 @@ html {
     opacity: 1;
     transform: translateY(0);
 }
-
-object.email {
-	height: 2em;
-	margin: -1em 0;
-	vertical-align: middle;
-}
