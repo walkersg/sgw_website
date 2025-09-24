@@ -212,7 +212,7 @@ window.addEventListener('load', function() {
 
 // Load research statistics from JSON file
 function loadResearchStatistics() {
-    fetch('assets/researchdata.json')
+    fetch('assets/researchData.json')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
